@@ -145,6 +145,35 @@ footer .sponsored-tag{display:inline-block;background:#c0392b;color:#fff;font-we
     })();
 </script>
 <!-- /Mgid Sensor -->
+<!-- Adclida — preserva clickid/utm nos links de saida (postback MGID x Hotmart) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var links = document.querySelectorAll('a');
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.toString() === '') {
+            return;
+        }
+        for (var i = 0; i < links.length; i++) {
+            var link = links[i];
+            var linkUrl = link.href;
+            var hashIndex = linkUrl.indexOf('#');
+            var urlWithoutHash = linkUrl;
+            var urlHash = '';
+            if (hashIndex !== -1) {
+                urlWithoutHash = linkUrl.substring(0, hashIndex);
+                urlHash = linkUrl.substring(hashIndex);
+            }
+            var existingParams = new URLSearchParams(urlWithoutHash.split('?')[1]);
+            urlParams.forEach(function(value, key) {
+                if (!existingParams.has(key)) {
+                    existingParams.append(key, value);
+                }
+            });
+            link.href = urlWithoutHash.split('?')[0] + '?' + existingParams.toString() + urlHash;
+        }
+    });
+</script>
+<!-- /Adclida -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="topbar"><div class="inner">
